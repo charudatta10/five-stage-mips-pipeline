@@ -11,8 +11,7 @@ module InstructionMemory(
   initial
   begin
     // Put program in here...
-    instruction_memory_file[0] <= 23;
-    instruction_memory_file[1] <= 1234;
+    instruction_memory_file[0] <= 0;
   end
 
   //always @(negedge clk) begin
