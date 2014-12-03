@@ -13,7 +13,7 @@ module InstructionFetch(
   InstructionMemory instr_mem(clk, PC, instr_at_PC);
 
 
-  always @(*) begin
+  always @(posedge clk) begin
     PC_plus_4 <= PC + 4;
     if (~IF_Flush)
       instruction <= instr_at_PC;
