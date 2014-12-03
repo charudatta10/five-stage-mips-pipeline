@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
 module InstructionMemory(
-  input [5:0] instruction_address,
   input clk,
+  input [5:0] instruction_address,
   output reg [31:0] instruction
   );
 
@@ -11,7 +11,8 @@ module InstructionMemory(
   initial
   begin
     // Put program in here...
-    instruction_memory_file[0] <= 0;
+    instruction_memory_file[0] <= 1337;
+    instruction_memory_file[4] <= 4294967295;
   end
 
   //always @(negedge clk) begin
