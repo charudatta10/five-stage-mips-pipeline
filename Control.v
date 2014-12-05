@@ -25,7 +25,7 @@ output reg [1:0] ALUOp; // 2-bit intermediate output for controlling ALU
 
 
 //ALUOP:: 00 = lw, sw; 01 = beq; 10 = arithmetic; 11 = Jump
-always @(opcode) begin
+always @(*) begin
 ALUSrc = 0;  RegDst = 0;  MemWrite = 0;   MemRead = 0;  Beq = 0;   Bne = 0;  Jump = 0;  MemToReg = 0;  RegWrite = 0;
 case(opcode)
 6'b 000100: //beq
