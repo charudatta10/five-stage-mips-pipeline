@@ -1,28 +1,35 @@
 module InstructionDecoder(
-input clk, 
+input Clk, 
 input [31:0] Instruction,
-input [5:0] PC_plus_4,
-output ALUSrc, RegDst, MemWrite, MemRead, Beq, Bne, Jump, MemToReg, RegWrite,
+input [31:0] PC_plus_4,
+output ALUSrc, RegDst, MemWrite, MemRead, Beq, Bne, Jump, MemToReg, RegWrite, 
 output [2:0] ALUControl,
-output reg [4:0] Register_Rs,
-output reg [4:0] Register_Rt,
-output reg [4:0] Register_Rd,
-output reg [31:0] branch_addr
+output reg [31:0] branch_addr,
+output [31:0] ReadData1, ReadData2
 );
+//**UPDATE BRANCH_ADDR if REQ'd
+wire [31:0] branch_cmp;
+wire [4:0] Register_Rs, Register_Rt, Register_Rd;
 
-wire [31:0] intermit_branch_addr;
 
 Control ID_Control(Instruction[31:26], Instruction[5:0], ALUSrc, RegDst, MemWrite, MemRead, Beq, Bne, Jump, MemToReg, RegWrite, ALUControl); 
 
-SignExtension ID_BranchExt(Instruction[15:0], intermit_branch_addr);
-
+//calculate and load branch addr for jump case
+SignExtension ID_BranchExt(Instruction[15:0], branch_cmp);
 always @(*) begin
-  Register_Rs = Instruction[25:21];
-  Register_Rt = Instruction[20:16];
-  Register_Rd = Instruction[15:11];
-
-  branch_addr = branch_addr << 2;
-  branch_addr = PC_plus_4 + intermit_branch_addr;
+  branch_addr <= (branch_cmp << 2) + PC_plus_4;
 end
+//assign branch_cmp[31:2] = branch_cmp[29:0];
+//assign branch_cmp[1:0] = 2'b 00;
+//assign branch_cmp = branch_cmp + PC_plus_4;
+
+//load values from registers -- don't write
+assign Register_Rs = Instruction[25:21];
+assign Register_Rt = Instruction[20:16];
+assign Register_Rd = Instruction[15:11];                  //branch_cmp rand input -- NC
+RegisterFile registers(Register_Rs, Register_Rt, Register_Rd, branch_cmp, 0, Clk, ReadData1, ReadData2);
+
+// assign branch_addr = branch_cmp;
 
 endmodule
+

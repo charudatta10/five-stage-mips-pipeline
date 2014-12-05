@@ -25,7 +25,8 @@ input [31:0] WriteData; // Data to be written into WriteRegister
 input RegWrite; // RegWrite control signal. Data is written only when this signal is enabled
 input Clk;
 output reg [31:0] ReadData1, ReadData2;
-    
+ 
+
 reg [31:0] Register0,
 			  Register1,
 			  Register2,
@@ -58,7 +59,9 @@ reg [31:0] Register0,
 			  Register29,
 			  Register30,
 			  Register31;
-
+   initial begin
+   Register0=1;
+   end
 always @(*) begin
 	if (RegWrite) begin
 		case(WriteRegister)
